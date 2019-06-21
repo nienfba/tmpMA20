@@ -154,7 +154,7 @@ Voir l'injection de variables pour les formulaires dans le chapitre suivant.
 Elle permet de créer des classes filles pour chaque formulaire de notre applications qui nécessitent une validation et une réinjection de données en cas d'erreur. 
 Pour le formulaire d'ajout de catégorie par exemple, il vous faut créer une classe `CategoriesForm.class.php` dans le répertoire `application/Forms/`
 Cette classe devra obligatoirement déclarer et compléter la méthode `build` de sa classe parent (méthode abstraite). Cette méthode permet d'ajouter à notre objet tous les noms des champs que nous souhaitons réinjecter en cas d'erreur dans le formulaire (en utilisant la méthode `addFormField`). 
-Si nous transmettons alors une instance de cet objet au framework dans l'index `_form`du tableau de retour de notre contrôleur, le framework mettra à notre disposition une variable pour champs ajouté.
+Si nous transmettons alors une instance de cet objet au framework dans l'index `_form`du tableau de retour de notre contrôleur, le framework mettra à notre disposition une variable par champs ajouté.
 
 **Exemple d'une classe form :** 
 
