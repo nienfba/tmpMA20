@@ -1,0 +1,57 @@
+<h3>Les dernières commandes</h3>
+<section class="table-responsive"> 
+    <table  class="tableDonnee table">
+        <thead>
+            <th>Id</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Date de paiement</th>
+            <th>Date d'expédition</th>
+            <th>Date de livraison</th>
+            <th>Client</th>
+            <th></th>
+        </thead>
+        <tbody>
+            <?php foreach($orders as $order):?>
+                <tr>
+                    <td><?=$order['ord_id']?></td>
+                    <td><?=$order['ord_date']?></td>
+                    <td>
+                        <?=OrderStatus::getStatusText($order['ord_status'])?>
+                    </td>
+                    <td><?=$order['ord_datePayment']?></td>
+                    <td><?=$order['ord_dateShipped']?></td>
+                    <td><?=$order['ord_dateDelivery']?></td>
+                    <td><?=$order['cust_firstname']?> <?=$order['cust_lastname']?></td>
+                    <td><a href="<?= $requestUrl ?>/admin/orders/update/?id=<?=$order['ord_id']?>"><i class="fas fa-edit"></i></a><a href="<?= $requestUrl ?>/admin/orders/view/?id="><i class="fas fa-eye"></i></a></td>
+                </tr>
+            <?php endforeach;?>
+        </tbody>
+    </table>
+</section>
+
+<h3>Les derniers clients</h3>
+<section class="table-responsive"> 
+    <table  class="tableDonnee table">
+        <thead>
+            <th>Id</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Date d'inscription</th>
+            <th>Email</th>
+            <th></th>
+        </thead>
+        <tbody>
+            <?php// foreach($categories as $categorie):?>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><a href="<?= $requestUrl ?>/admin/orders/view/?id="><i class="fas fa-eye"></i></a></td>
+                </tr>
+            <?php //endforeach;?>
+        </tbody>
+    </table>
+</section>
