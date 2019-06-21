@@ -135,7 +135,7 @@ Exemple d'appel d'un modèle dans le contrôleur :
     $categorie = new CategorieModel();
     $categorie->add('titre','description','url/image');
 
-## Transmettre des données à la vue
+## Transmettre des données à la vue à partir d'un contrôleur
 Il suffit de retourner un tableau association à partir du contrôleur pour que chaque index du tableau devienne une variable pour la vue. Ces variables contiennent respectivement la valeur associé dans le tableau.
 Exemple :
 
@@ -144,11 +144,86 @@ Exemple :
 
 Dans la vue il sera donc possible d'appeler les variables `$title` et `$articles`
 
-L'utilisation d'un index `_form` ou `_raw_template` dans le tableau retourné par le contrôleur va induire une attente du framework. Dans le premier cas la valeur transmise devra être un objet instance de la class Form, dans le deuxième cas le framework attend un booléen. Si `true`la vue sera chargée sans le layout.  
+L'utilisation d'un index `_form` ou `_raw_template` dans le tableau retourné par le contrôleur va induire une attente du framework. Dans le premier cas la valeur transmise devra être un objet instance de la classe Form (plus précisément une classe fille de Form), dans le deuxième cas le framework attend un booléen (si `true`la vue sera chargée sans le layout).
+
+Voir l'injection de variables pour les formulaires dans le chapitre suivant.
+
+## La classe Form
+Elle permet de créer des classes filles pour chaque formulaire de notre applications qui nécessitent une validation et une réinjection de données en cas d'erreur. 
+Pour le formulaire d'ajout de catégorie par exemple, il vous faut créer une classe `CategoriesForm.class.php` dans le répertoire `application/Forms/`
+Cette classe devra obligatoirement déclarer et compléter la méthode `build` de sa classe parent (méthode abstraite). Cette méthode permet d'ajouter à notre objet tous les noms des champs que nous souhaitons réinjecter en cas d'erreur dans le formulaire (en utilisant la méthode `addFormField`). 
+Si nous transmettons alors une instance de cet objet au framework dans l'index `_form`du tableau de retour de notre contrôleur, le framework mettra à notre disposition une variable pour champs ajouté.
+
+**Exemple d'une classe form :** 
+
+    <?php
+    class CategoriesForm extends Form
+    {
+	    public function build()
+	    {
+	        $this->addFormField('name');
+	        $this->addFormField('contents');
+	        $this->addFormField('id');
+	        $this->addFormField('originalpicture');
+	    }
+    }
+
+**Exemple d'utilisation dans un contrôleur :** 
+Injection des variables du formulaire sans valeur (méthode GET) :
+
+    public function httpGetMethod(Http $http, array $queryFields)
+    {
+        return [
+	    'title'=>'Ajouter une catégorie',
+	    'active'=>'addCategory',
+	    '_form' => new CategoriesForm()
+        ];
+    }
+Injection des variables avec valeur en cas d'erreur (méthode POST) :
+
+    public  function  httpPostMethod(Http  $http,  array  $formFields)
+    {
+	    try
+	    {
+		    /** Ici on traite les données du formulaire
+		    et en cas d'erreur on lance un Exception de type 
+		    DomainException*/
+		    
+	    }
+	    catch(DomainException $exception)
+        {
+             /** DomainException est un type d'exception prédéfinie par PHP (valeur en dehors des limites selon la doc, on l'utilise donc ici pour ça !)
+             *   On a choisi ce type d'exception dans l'arbre généalogique des exceptions fournies par PHP. On aurait pu faire notre propre class
+             *   Exemple : class FormValideException extends Exception {} et faire ensuite un catch(FormValideException $exception)
+             */
+
+            /** Réaffichage du formulaire avec un message d'erreur. */
+            $form = new CategoriesForm();
+            /** On bind nos données $_POST ($formFields) avec notre objet formulaire */
+            $form->bind($formFields);
+            /** On affecte notre message d'erreur */
+            $form->setErrorMessage($exception->getMessage());
+            
+            return [ 
+                'title'=>'Ajouter une catégorie',
+			    'active'=>'addCategory',
+                '_form' => $form 
+            ]; 
+        }
+     }
+
+Nous aurons donc à disposition dans notre Vue dans ce cas les variables suivantes :
+
+ - $id
+ - $name
+ - $contents
+ - $originalPicture
+ - et la variable $errorMessage pour afficher le message levé par l'exception
 
 ## La classe Http
 
 * **Upload de fichier** exemple pour un champs input `picture`
+
     ` /** Image uploadée
             *   On la déplace sinon on affecte à NULL pour la saisie en base
             */
