@@ -10,16 +10,18 @@
 
 # Documentation
 ## Créer un contrôleur
-Dans le dossier `application/controllers/` il vous suffit de créer une classe Controller. Par exemple pour créer un contrôleur qui va afficher une liste de produits que l'on va nommer `ListeArticle` il faudra créer un fichier `ListeArticleController.class.php` dans le répertoire `application/controllers/listearticle/`
+Dans le dossier `application/controllers/` il vous suffit de créer une classe Controller. Par exemple pour créer un contrôleur qui va afficher une liste de produits que l'on va nommer `ListeArticle` il faudra créer un fichier `ArticleController.class.php` dans le répertoire `application/controllers/admin/article/`
 Dans ce fichier il faudra créer une classe `ListeArticleController` qui contiendra 2 méthodes :
 
  - public  function  httpGetMethod(Http  $http,  array  $queryFields)
  - public  function  httpPostMethod(Http  $http,  array  $formFields)
 
 La première sera appelée en cas de requête GET vers le contrôleur et bien sûr la deuxième en cas de requête POST vers le contrôleur.
-Exemple complet :
+Pour créer un contôleur qui permettre d'ajouter un article et garder une logique dans le routing de l'application on pourra créer un contrôleur `addController` dans le dossier  `application/controllers/admin/article/add/`.
 
-    class  ListeArticleController
+Exemple complet pour ArticleController :
+
+    class  ArticleController
     {
     
 	    public  function  httpGetMethod(Http  $http,  array  $queryFields)
