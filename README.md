@@ -9,6 +9,14 @@
 
 
 # Documentation
+
+## Download and Installation
+To begin using this e-commerce system :
+* In your web folder make sure you do not have a tmpMA20 directory
+* Clone the repo on your web folder : `git clone https://github.com/nienfba/tmpMA20.git` or download it !
+* Create Database `cupoftea` on phpmyadmin and import `./cupoftea.sql`
+* Configure file application/config/database.php.dist and rename to database.php
+
 ## Créer un contrôleur
 Dans le dossier `application/controllers/` il vous suffit de créer une classe Controller. Par exemple pour créer un contrôleur qui va afficher une liste de produits que l'on va nommer `ListeArticle` il faudra créer un fichier `ArticleController.class.php` dans le répertoire `application/controllers/admin/article/`
 Dans ce fichier il faudra créer une classe `ListeArticleController` qui contiendra 2 méthodes :

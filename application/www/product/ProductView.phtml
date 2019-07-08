@@ -1,0 +1,44 @@
+<main class="container">
+    <section id="product">
+        <section id="product-detail">
+            <div id="product-name">
+                <h1><?=$product['prod_name']?></h1>
+                <h2><?=$product['prod_subtitle']?></h2>
+                <p>Ref : 133742</p>
+            </div>
+            <div id="rating">
+                <i class="gold fa fa-star" aria-hidden="true"></i>
+                <i class="gold fa fa-star" aria-hidden="true"></i>
+                <i class="gold fa fa-star" aria-hidden="true"></i>
+                <i class="gold fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <a href="#">Voir les 56 avis clients</a>
+            </div>
+        </section>
+        <section id="product-quantity">
+            <?php if(!is_null($product['prod_picture'])):?>
+                <img src="<?= $wwwUrl ?>/uploads/products/<?=$product['prod_picture']?>" alt="<?=$product['prod_name']?>" />
+            <?php else:?>
+                <img src="https://via.placeholder.com/300" />
+            <?php endif;?>
+            <div class="price">
+                <?php if($variations):?>
+                    <select name="variation" id="variation">
+                        <?php foreach($variations as $variation):?>
+                            <option value="<?=$variation['prodv_id']?>" data-name="<?=$variation['prodv_name']?>" data-price="<?=$variation['priceTTC']?>"><?=$variation['prodv_name'].' ('.$variation['priceTTC'].' €)'?></option>
+                        <?php endforeach;?>
+                    </select>
+                    <h3 id="price"><span><?=$variations[0]['priceTTC'];?></span> €</h3>
+                <?php else:?>
+                    <h3 id="price"><span><?=$product['priceTTC'];?></span> €</h3>
+                <?php endif?>
+                <p><label for="quantity">Quantité :</label> <input type="number" id="quantity" name="quantity" value="1" min="1" max="20" /></p>
+                <a class="btn" href="#" id="addCart" data-id="<?=$product['prod_id']?>" data-picture="<?=$product['prod_picture']?>" data-name="<?=$product['prod_name']?>" data-price="<?=$product['priceTTC']?>">Ajouter au panier</a>
+                <a id="wishlist" href="#">Ajouter à ma liste d'envie</a>
+            </div>
+        </section>
+        <section id="product-description">
+            <?=$product['prod_description']?>
+        </section>
+    </section>
+</main>
