@@ -237,11 +237,78 @@ Nous aurons donc à disposition dans notre Vue dans ce cas les variables suivant
     ` /** Image uploadée
             *   On la déplace sinon on affecte à NULL pour la saisie en base
             */
-            if ($http->hasUploadedFile('picture'))
-                $picture = $http->moveUploadedFile('picture','/uploads/categories');
-            else 
-                $picture = NULL;`
+	    if ($http->hasUploadedFile('picture'))
+	    	$picture = $http->moveUploadedFile('picture','/uploads/categories');
+	else
+		$picture = NULL;`
                 
 * **Redirection** vers une autre page en fournissant une route du framework :
     `/** Redirection vers la liste des catégories */
      $http->redirectTo('admin/categories/');
+     
+## Les filtres d'interception
+
+* **Créer un filtre d'interception** exemple pour un filtre qui va activer la session sur toutes les pages
+
+	class UserSessionFilter implements InterceptingFilter
+	{
+		public function run(Http $http, array $queryFields, array $formFields)
+		{
+			return
+			[
+		   		 'userSession' => new UserSession()
+			];
+		}
+	}
+	
+* **Création de la classe Session et synopsis de ses méthodes **
+
+	class UserSession
+	{
+		public function __construct()
+		{
+			if(session_status() == PHP_SESSION_NONE)
+			{
+		    		// Démarrage du module PHP de gestion des sessions.
+				session_start();
+			}
+		}
+
+		public function create($userId, $firstName, $lastName, $email)
+		{
+			// Construction de la session utilisateur.
+			
+		}
+		
+		public function destroy()
+		{
+			// Destruction de l'ensemble de la session.
+			$_SESSION = array();
+			session_destroy();
+		}
+
+		public function createOrder($orderId)
+		{
+			// Construction de la session utilisateur.
+			$_SESSION['order'] = $orderId;
+		}
+
+		
+
+		public function getOrderId()
+		{
+			if($this->isAuthenticated() == false || !isset($_SESSION['order']))
+			{
+				return null;
+			}
+
+			return $_SESSION['order'];
+		}
+
+		public function getEmail(){}
+		public function getFirstName(){}
+		public function getFullName(){}
+		public function getLastName(){}
+		public function getUserId(){}
+		public function isAuthenticated(){}
+	}
