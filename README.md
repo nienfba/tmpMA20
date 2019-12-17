@@ -250,65 +250,75 @@ Nous aurons donc à disposition dans notre Vue dans ce cas les variables suivant
 
 * **Créer un filtre d'interception** exemple pour un filtre qui va activer la session sur toutes les pages
 
-	class UserSessionFilter implements InterceptingFilter
-	{
-		public function run(Http $http, array $queryFields, array $formFields)
+		class UserSessionFilter implements InterceptingFilter
 		{
-			return
-			[
-		   		 'userSession' => new UserSession()
-			];
+			public function run(Http $http, array $queryFields, array $formFields)
+			{
+				return
+				[
+					 'userSession' => new UserSession()
+				];
+			}
 		}
-	}
+		
+Bien sur il faut rajouter ce Filtrer d'interception dans la configuration du Framework (config/library.php)
+		
+		$config['intercepting-filters'] = ['UserSession']
+		
+## Exemple pour la gestion de la session sur le Framewok.
+
+Cette classe sera instanciée par le filtre d'interception ci-avant. Vous poureez ainsi avoir accès à cet objet dans vos vues et dans le layout. Il sera alors possible d'afficher des éléments spacifique selon que l'utilisateur soit connecté ou non par exemple.
 	
 * **Création de la classe Session et synopsis de ses méthodes **
 
-	class UserSession
-	{
-		public function __construct()
+Les méthodes notées final sont terminées... Les autre sont à compléter par vos soins !!
+
+		class UserSession
 		{
-			if(session_status() == PHP_SESSION_NONE)
+			final public function __construct()
 			{
-		    		// Démarrage du module PHP de gestion des sessions.
-				session_start();
-			}
-		}
-
-		public function create($userId, $firstName, $lastName, $email)
-		{
-			// Construction de la session utilisateur.
-			
-		}
-		
-		public function destroy()
-		{
-			// Destruction de l'ensemble de la session.
-			$_SESSION = array();
-			session_destroy();
-		}
-
-		public function createOrder($orderId)
-		{
-			// Construction de la session utilisateur.
-			$_SESSION['order'] = $orderId;
-		}
-
-		
-
-		public function getOrderId()
-		{
-			if($this->isAuthenticated() == false || !isset($_SESSION['order']))
-			{
-				return null;
+				if(session_status() == PHP_SESSION_NONE)
+				{
+					// Démarrage du module PHP de gestion des sessions.
+					session_start();
+				}
 			}
 
-			return $_SESSION['order'];
-		}
+			public function create($userId, $firstName, $lastName, $email)
+			{
+				// Construction de la session utilisateur.
 
-		public function getEmail(){}
-		public function getFirstName(){}
-		public function getFullName(){}
-		public function getLastName(){}
-		public function getUserId(){}
-		public function isAuthenticated(){}
-	}
+			}
+		
+			final public function destroy()
+			{
+				// Destruction de l'ensemble de la session.
+				$_SESSION = array();
+				session_destroy();
+			}
+
+			final public function createOrder($orderId)
+			{
+				// Construction de la session utilisateur.
+				$_SESSION['order'] = $orderId;
+			}
+
+
+
+			final public function getOrderId()
+			{
+				if($this->isAuthenticated() == false || !isset($_SESSION['order']))
+				{
+					return null;
+				}
+
+				return $_SESSION['order'];
+			}
+
+			public function getEmail(){}
+			public function getFirstName(){}
+			public function getFullName(){}
+			public function getLastName(){}
+			public function getUserId(){}
+			public function isAuthenticated(){}
+		}
