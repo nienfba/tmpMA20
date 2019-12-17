@@ -234,13 +234,13 @@ Nous aurons donc à disposition dans notre Vue dans ce cas les variables suivant
 
 * **Upload de fichier** exemple pour un champs input `picture`
 
-    ` /** Image uploadée
-            *   On la déplace sinon on affecte à NULL pour la saisie en base
-            */
-	    if ($http->hasUploadedFile('picture'))
-	    	$picture = $http->moveUploadedFile('picture','/uploads/categories');
-	else
-		$picture = NULL;`
+		/** Image uploadée
+		*   On la déplace sinon on affecte à NULL pour la saisie en base
+		*/
+		if ($http->hasUploadedFile('picture'))
+			$picture = $http->moveUploadedFile('picture','/uploads/categories');
+		else
+			$picture = NULL;
                 
 * **Redirection** vers une autre page en fournissant une route du framework :
     `/** Redirection vers la liste des catégories */
